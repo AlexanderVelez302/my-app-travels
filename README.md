@@ -29,5 +29,5 @@ Antes de ejecutar el proyecto, asegúrate de tener instalados:
 ### 🔹 Instalación  
 Clona este repositorio y entra en el directorio del proyecto:  
 ```sh
-git clone https://github.com/tu-usuario/myapp-travels.git
+git clone https://github.com/AlexanderVelez302/my-app-travels.git
 cd myapp-travels
