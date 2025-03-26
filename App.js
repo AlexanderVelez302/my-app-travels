@@ -1,5 +1,5 @@
 import React from "react";
-import { AuthProvider } from "./src/context/AuthContext";
+import { AuthProvider } from "./src/screens/auth/AuthContext";
 import AppNavigator from "./src/navigation/Appnavigator";
 
 const App = () => {

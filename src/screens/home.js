@@ -1,14 +1,28 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Image, Platform, ScrollView, Dimensions, ImageBackground } from "react-native";
+import { 
+  View, Text, StyleSheet, TouchableOpacity, Image, 
+  Platform, ScrollView, Dimensions, ImageBackground 
+} from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import Icon from 'react-native-vector-icons/Ionicons'; 
 import * as Location from 'expo-location';
 import { LinearGradient } from 'expo-linear-gradient';
 
+// Importamos Firebase Firestore
+import { db } from "../constants/firebaseConfig";
+import { collection, getDocs } from "firebase/firestore";
+
+// Importamos el contexto de autenticación
+import { useAuth } from "../screens/auth/AuthContext";
+
 const { width, height } = Dimensions.get("window");
 
 const HomeScreen = ({ navigation }) => {
+  const { user } = useAuth(); // Obtener el usuario autenticado
+
   const [location, setLocation] = useState(null);
+  const [hoteles, setHoteles] = useState([]);  
+  const [loading, setLoading] = useState(true); 
 
   useEffect(() => {
     const requestLocationPermission = async () => {
@@ -28,6 +42,22 @@ const HomeScreen = ({ navigation }) => {
     requestLocationPermission();
   }, []);
 
+  useEffect(() => {
+    const fetchHoteles = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, "hoteles"));
+        const hotelesData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        setHoteles(hotelesData);
+      } catch (error) {
+        console.error("Error obteniendo hoteles:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchHoteles();
+  }, []);
+
   return (
     <View style={styles.container}>
       {/* Fondo con imagen */}
@@ -45,13 +75,20 @@ const HomeScreen = ({ navigation }) => {
             { name: "home-outline", screen: "Home" },
             { name: "calendar-outline", screen: "Calendar" },
             { name: "compass-outline",  screen: "Explore" },
-            { name: "notifications-outline",screen: "Notifications" },
-            { name: "person-outline", label: "Perfil", screen: "Profile" }
+            { name: "notifications-outline",screen: "Notifications" }
           ].map((item, index) => (
             <TouchableOpacity key={index} style={styles.navButton} onPress={() => navigation.navigate(item.screen)}>
               <Icon name={item.name} size={20} color="#fff" />
             </TouchableOpacity>
           ))}
+
+          {/* BOTÓN DE PERFIL QUE VERIFICA AUTENTICACIÓN */}
+          <TouchableOpacity 
+            style={styles.navButton} 
+            onPress={() => navigation.navigate(user ? "Profile" : "Login")} 
+          >
+            <Icon name="person-outline" size={20} color="#fff" />
+          </TouchableOpacity>
         </ScrollView>
         <View style={styles.navBarBottomMargin} />
       </View>
@@ -80,8 +117,20 @@ const HomeScreen = ({ navigation }) => {
 
       {/* Información del hotel */}
       <View style={styles.hotelInfo}>
-        <Text style={styles.hotelTitle}>Hotel Ejemplo</Text>
-        <Text style={styles.hotelDescription}>Descripción del hotel seleccionado.</Text>
+        <Text style={styles.hotelTitle}>Hoteles Disponibles</Text>
+
+        {loading ? (
+          <Text>Cargando hoteles...</Text>
+        ) : hoteles.length > 0 ? (
+          hoteles.map(hotel => (
+            <View key={hotel.id} style={styles.hotelCard}>
+              <Text style={styles.hotelName}>{hotel.nombre}</Text>
+              <Text style={styles.hotelDescription}>{hotel.descripcion}</Text>
+            </View>
+          ))
+        ) : (
+          <Text>No hay hoteles disponibles.</Text>
+        )}
       </View>
     </View>
   );
@@ -133,12 +182,6 @@ const styles = StyleSheet.create({
     height: 40,
     paddingHorizontal: 23,
   },
-  navButtonText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "bold",
-    marginLeft: 5,
-  },
   navBarBottomMargin: {
     height: 10,
     backgroundColor: "#f5f5dc",
@@ -165,6 +208,16 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     marginBottom: 10,
+  },
+  hotelCard: {
+    padding: 10,
+    backgroundColor: "#f8f8f8",
+    marginBottom: 10,
+    borderRadius: 5,
+  },
+  hotelName: {
+    fontSize: 18,
+    fontWeight: "bold",
   },
   hotelDescription: {
     fontSize: 16,

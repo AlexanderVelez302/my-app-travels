@@ -34,3 +34,7 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
+
+# Firebase
+# Learn more https://firebase.google.com/docs/web/setup#add-sdks-initialize
+my-app-travels-firebase-adminsdk-fbsvc-92967a34e2.json
