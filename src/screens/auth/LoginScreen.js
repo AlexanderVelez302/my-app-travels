@@ -1,11 +1,9 @@
 import React, { useState } from "react";
-import { 
-  View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Dimensions, 
-  Image, ImageBackground, Platform 
-} from "react-native";
-import Icon from 'react-native-vector-icons/Ionicons'; 
-import { LinearGradient } from 'expo-linear-gradient';
-import { useAuth } from "../auth/AuthContext";  // ⚠ Verifica que la ruta sea correcta
+import {
+  View, Text,StyleSheet , TextInput, TouchableOpacity, Dimensions, Image, ImageBackground} from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
+import Icon from "react-native-vector-icons/Ionicons";
+import { useAuth } from "../auth/AuthContext";
 
 const { width, height } = Dimensions.get("window");
 
@@ -27,57 +25,76 @@ const LoginScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       {/* Fondo con imagen */}
-      <ImageBackground source={require("../../../assets/Tokyo.png")} style={styles.backgroundImage}>
-        <LinearGradient colors={["rgba(0,0,0,0.7)", "transparent"]} start={{ x: 0.5, y: 1 }} end={{ x: 0.5, y: 0 }} style={styles.header}>
-          <Image source={require("../../../assets/Skynova_white.png")} style={styles.logo} />
-          <Text style={styles.headerText}>SkyNova</Text>
-        </LinearGradient>
+      <ImageBackground
+        source={require("../../../assets/Tokyo.png")}
+        style={styles.backgroundImage}
+      >
+        <LinearGradient
+          colors={["rgba(0,0,0,0.6)", "transparent"]}
+          start={{ x: 0.5, y: 1 }}
+          end={{ x: 0.5, y: 0 }}
+          style={styles.overlay}
+        />
       </ImageBackground>
 
-      {/* Barra de navegación */}
-      <View style={styles.navBarContainer}>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.navBar}>
-          {[
-            { name: "home-outline", screen: "Home" },
-            { name: "calendar-outline", screen: "Calendar" },
-            { name: "compass-outline", screen: "Explore" },
-            { name: "notifications-outline", screen: "Notifications" }
-          ].map((item, index) => (
-            <TouchableOpacity key={index} style={styles.navButton} onPress={() => navigation.navigate(item.screen)}>
-              <Icon name={item.name} size={20} color="#fff" />
-            </TouchableOpacity>
-          ))}
-          {/* Botón de perfil (Desactivado en Login) */}
-          <TouchableOpacity style={styles.navButton}>
-            <Icon name="person-outline" size={20} color="#fff" />
-          </TouchableOpacity>
-        </ScrollView>
-      </View>
+      {/* Contenedor del Login */}
+      <View style={styles.card}>
+        <Text style={styles.title}>Bienvenido</Text>
 
-      {/* Formulario de Login */}
-      <View style={styles.loginContainer}>
-        <Text style={styles.title}>Iniciar Sesión</Text>
         {error ? <Text style={styles.error}>{error}</Text> : null}
+
         <TextInput
           style={styles.input}
-          placeholder="Correo electrónico"
+          placeholder="Email"
           placeholderTextColor="#aaa"
           value={email}
           onChangeText={setEmail}
         />
         <TextInput
           style={styles.input}
-          placeholder="Contraseña"
+          placeholder="Password"
           placeholderTextColor="#aaa"
           secureTextEntry
           value={password}
           onChangeText={setPassword}
         />
+
+        {/* Checkbox y "Forgot Password" */}
+        <View style={styles.row}>
+          <TouchableOpacity style={styles.checkboxContainer}>
+            <Icon name="checkmark-circle" size={20} color="#007bff" />
+            <Text style={styles.checkboxText}>Remember me</Text>
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Text style={styles.forgotPassword}>Forgot password?</Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Botón de Login */}
         <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-          <Text style={styles.loginButtonText}>Iniciar Sesión</Text>
+          <LinearGradient
+            colors={["#007bff", "#0056b3"]}
+            style={styles.gradientButton}
+          >
+            <Text style={styles.loginButtonText}>Log In</Text>
+          </LinearGradient>
         </TouchableOpacity>
+
+        {/* Redes sociales */}
+        <Text style={styles.orText}>Log In with</Text>
+        <View style={styles.socialContainer}>
+          {["logo-facebook", "logo-twitter", "logo-google", "logo-apple"].map(
+            (icon, index) => (
+              <TouchableOpacity key={index} style={styles.socialButton}>
+                <Icon name={icon} size={24} color="#fff" />
+              </TouchableOpacity>
+            )
+          )}
+        </View>
+
+        {/* Link para registrarse */}
         <TouchableOpacity onPress={() => navigation.navigate("Register")}>
-          <Text style={styles.registerText}>¿No tienes cuenta? Regístrate</Text>
+          <Text style={styles.registerText}>Sign Up</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -90,55 +107,36 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#f5f5f5",
+    justifyContent: "center",
+    alignItems: "center",
   },
   backgroundImage: {
+    position: "absolute",
     width: "100%",
-    height: height * 0.20,
+    height: "100%",
   },
-  header: {
-    paddingTop: Platform.OS === "ios" ? 50 : 30,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    paddingVertical: 10,
+  overlay: {
     width: "100%",
-    height: height * 0.20,
+    height: "100%",
+    position: "absolute",
   },
-  logo: {
-    width: 60,
-    height: 40,
-    marginRight: 10,
-  },
-  headerText: {
-    fontSize: 24,
-    color: "#fff",
-    fontWeight: "bold",
-  },
-  navBarContainer: {
-    backgroundColor: "#000",
-  },
-  navBar: {
-    paddingVertical: 20,
-  },
-  navButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#000",
-    paddingHorizontal: 15,
-    marginHorizontal: 5,
-    borderRadius: 5,
-    height: 40,
-  },
-  loginContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+  card: {
+    width: width * 0.85,
     padding: 20,
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    alignItems: "center",
+    elevation: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
   },
   title: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: "bold",
-    marginBottom: 20,
+    marginBottom: 15,
+    color: "#333",
   },
   input: {
     width: "100%",
@@ -146,25 +144,61 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     borderWidth: 1,
     borderColor: "#ccc",
-    borderRadius: 8,
+    borderRadius: 10,
     backgroundColor: "#fff",
   },
-  loginButton: {
-    backgroundColor: "#007bff",
-    padding: 15,
-    borderRadius: 8,
-    alignItems: "center",
+  row: {
+    flexDirection: "row",
+    justifyContent: "space-between",
     width: "100%",
-    marginTop: 10,
+    marginBottom: 15,
+  },
+  checkboxContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  checkboxText: {
+    marginLeft: 5,
+    color: "#666",
+  },
+  forgotPassword: {
+    color: "#007bff",
+    fontWeight: "500",
+  },
+  loginButton: {
+    width: "100%",
+    borderRadius: 10,
+    overflow: "hidden",
+    marginBottom: 10,
+  },
+  gradientButton: {
+    padding: 15,
+    alignItems: "center",
   },
   loginButtonText: {
     color: "#fff",
     fontSize: 16,
     fontWeight: "bold",
   },
+  orText: {
+    color: "#999",
+    marginVertical: 10,
+  },
+  socialContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    width: "100%",
+  },
+  socialButton: {
+    backgroundColor: "#007bff",
+    padding: 10,
+    borderRadius: 10,
+    marginHorizontal: 10,
+  },
   registerText: {
-    marginTop: 10,
+    marginTop: 15,
     color: "#007bff",
+    fontWeight: "500",
   },
   error: {
     color: "red",
