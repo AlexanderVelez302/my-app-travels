@@ -1,24 +1,37 @@
-import { StyleSheet } from "react-native";
+// 📁 src/styles/RegisterStyles.js
+import { StyleSheet, Dimensions } from "react-native";
+
+const { width } = Dimensions.get("window");
 
 export default StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
+    justifyContent: "center",
+    alignItems: "center",
   },
   backgroundImage: {
-    flex: 1,
-    resizeMode: "cover",
     position: "absolute",
     width: "100%",
     height: "100%",
+    resizeMode: "cover",
   },
   overlay: {
-    flex: 1,
+    width: "100%",
+    height: "100%",
+    position: "absolute",
   },
   card: {
-    flex: 1,
-    justifyContent: "center",
+    width: width * 0.85,
     padding: 20,
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    alignItems: "center",
+    elevation: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
   },
   title: {
     fontSize: 28,
@@ -27,6 +40,7 @@ export default StyleSheet.create({
     marginBottom: 20,
   },
   input: {
+    width: "100%",
     backgroundColor: "#fff",
     borderColor: "#ccc",
     borderWidth: 1,
@@ -36,11 +50,13 @@ export default StyleSheet.create({
     fontSize: 16,
   },
   loginButton: {
+    width: "100%",
     marginTop: 10,
+    borderRadius: 10,
+    overflow: "hidden",
   },
   gradientButton: {
     padding: 15,
-    borderRadius: 10,
     alignItems: "center",
   },
   loginButtonText: {
