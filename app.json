@@ -1,44 +1,28 @@
 {
   "expo": {
-    "name": "my-app-travels",
-    "slug": "my-app-travels",
+    "name": "SkiNova",
+    "slug": "SkiNova",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/Skynova_white.png",
+    "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/Skynova_white.png",
+      "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true,
-      "infoPlist": {
-        "NSLocationWhenInUseUsageDescription": "We need your location to show your position on the map",
-        "NSLocationAlwaysUsageDescription": "We need your location to show your position on the map"
-      }
+      "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/Skynova_white.png",
+        "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      },
-      "permissions": [
-        "ACCESS_FINE_LOCATION",
-        "ACCESS_COARSE_LOCATION"
-      ]
+      }
     },
-    "plugins": [
-      [
-        "expo-location",
-        {
-          "locationAlwaysAndWhenInUsePermission": "We need your location to show your position on the map"
-        }
-      ]
-    ],
     "web": {
-      "favicon": "./assets/Skynova_white.png"
+      "favicon": "./assets/favicon.png"
     }
   }
 }
