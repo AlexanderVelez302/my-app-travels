@@ -1,5 +1,3 @@
-// 📁 src/screens/LoginScreen.js
-
 import React, { useState, useEffect } from "react";
 import {
   View,
@@ -11,9 +9,10 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import Icon from "react-native-vector-icons/Ionicons";
 import { onAuthStateChanged } from "firebase/auth";
-import { auth, obtenerRolUsuarioPorUID } from "../../constants/firebaseConfig"; // ✅ función actualizada
+import { auth } from "../../constants/firebaseConfig";
 import { useAuth } from "../auth/AuthContext";
-import styles from "../../styles/LoginStyles"; // ✅ Estilos separados
+import styles from "../../styles/LoginStyles";
+import { obtenerRolUsuarioPorUID } from "../../constants/firebaseConfig";
 
 const LoginScreen = ({ navigation }) => {
   const { login } = useAuth();
@@ -37,14 +36,13 @@ const LoginScreen = ({ navigation }) => {
     try {
       await login(email, password);
 
-      const uid = auth.currentUser.uid; // 🔹 Usamos UID del usuario actual
-      const rol = await obtenerRolUsuarioPorUID(uid); // 🔹 Obtenemos rol desde Firestore
+      const uid = auth.currentUser.uid;
+      const rol = await obtenerRolUsuarioPorUID(uid);
 
-      if (rol === "admin") {
-        navigation.navigate("AdminPanel");
-      } else {
-        navigation.navigate("Home");
-      }
+      console.log("🔐 Rol obtenido:", rol);
+
+      // Por ahora, redirigimos siempre a Home, sin importar el rol
+      navigation.replace("Home");
     } catch (err) {
       console.log("🔴 Error de login:", err);
       setError("Correo o contraseña incorrectos");
@@ -72,14 +70,14 @@ const LoginScreen = ({ navigation }) => {
 
         <TextInput
           style={styles.input}
-          placeholder="Email"
+          placeholder="Correo electrónico"
           placeholderTextColor="#aaa"
           value={email}
           onChangeText={setEmail}
         />
         <TextInput
           style={styles.input}
-          placeholder="Password"
+          placeholder="Contraseña"
           placeholderTextColor="#aaa"
           secureTextEntry
           value={password}

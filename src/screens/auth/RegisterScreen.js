@@ -6,7 +6,9 @@ import { LinearGradient } from "expo-linear-gradient";
 import Icon from "react-native-vector-icons/Ionicons";
 import { auth, db } from "../../constants/firebaseConfig";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { doc, setDoc, getDocs, collection, query, where } from "firebase/firestore";
+import {
+  doc, setDoc, getDocs, collection, query, where, updateDoc
+} from "firebase/firestore";
 import styles from "../../styles/RegisterStyles";
 import { useNavigation } from "@react-navigation/native";
 
@@ -27,7 +29,7 @@ const RegisterScreen = () => {
     }
 
     try {
-      // Buscar si ya existe un documento con esa cédula en Firestore
+      // Verificar si ya existe un usuario con esa cédula
       const q = query(collection(db, "usuarios"), where("cedula", "==", cedula));
       const querySnapshot = await getDocs(q);
 
@@ -36,23 +38,21 @@ const RegisterScreen = () => {
       const user = userCredential.user;
 
       if (!querySnapshot.empty) {
-        // ✅ Ya existe un usuario con esa cédula → actualizamos el documento
+        // ✅ Usuario ya existe → actualizar campos sin tocar el rol
         const docRef = querySnapshot.docs[0].ref;
-        const existingData = querySnapshot.docs[0].data();
 
-        await setDoc(docRef, {
-          ...existingData,
+        await updateDoc(docRef, {
           uid: user.uid,
           email: user.email,
           nombre,
           apellido,
-          creadoEn: new Date()
+          actualizadoEn: new Date()
         });
 
-        console.log("✅ Usuario registrado con rol existente:", existingData.rol);
+        console.log("✅ Usuario existente actualizado (rol preservado)");
       } else {
-        // ✅ No existe cédula → nuevo cliente
-        await setDoc(doc(db, "usuarios", user.uid), {
+        // ✅ Usuario nuevo → crear nuevo documento con cédula como ID
+        await setDoc(doc(db, "usuarios", cedula), {
           uid: user.uid,
           cedula,
           nombre,
@@ -62,10 +62,10 @@ const RegisterScreen = () => {
           creadoEn: new Date()
         });
 
-        console.log("✅ Nuevo cliente registrado.");
+        console.log("✅ Nuevo usuario registrado");
       }
 
-      navigation.replace("Home"); // Puedes cambiar a "Login" si lo prefieres
+      navigation.replace("Home"); // o "Login" si deseas volver al login
     } catch (err) {
       console.error("🔴 Error al registrar:", err);
       setError("Error al registrarse. Intenta de nuevo.");

@@ -1,8 +1,11 @@
 import { initializeApp } from "firebase/app";
-import { initializeAuth, getReactNativePersistence } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import {
+  initializeAuth,
+  getReactNativePersistence
+} from "firebase/auth";
+import { getFirestore, collection, query, where, getDocs } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
-import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage"; // 🔹 Importa AsyncStorage
+import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBhRpG_MdEYaj6j1-QeeXCI6d7GNng2CNU",
@@ -24,4 +27,23 @@ const auth = initializeAuth(app, {
 const db = getFirestore(app);
 const storage = getStorage(app);
 
-export { app, auth, db, storage };
+// 🔹 Función para obtener el rol del usuario desde Firestore usando UID
+const obtenerRolUsuarioPorUID = async (uid) => {
+  try {
+    const q = query(collection(db, "usuarios"), where("uid", "==", uid));
+    const querySnapshot = await getDocs(q);
+
+    if (!querySnapshot.empty) {
+      const userData = querySnapshot.docs[0].data();
+      return userData.rol;
+    } else {
+      console.warn("⚠️ No se encontró ningún usuario con ese UID");
+      return null;
+    }
+  } catch (error) {
+    console.error("❌ Error obteniendo el rol:", error);
+    return null;
+  }
+};
+
+export { app, auth, db, storage, obtenerRolUsuarioPorUID };
