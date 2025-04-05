@@ -3,11 +3,10 @@ import {
   View, Text, TextInput, TouchableOpacity, ImageBackground
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import Icon from "react-native-vector-icons/Ionicons";
 import { auth, db } from "../../constants/firebaseConfig";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import {
-  doc, setDoc, getDocs, collection, query, where, updateDoc
+  doc, setDoc, getDoc, updateDoc
 } from "firebase/firestore";
 import styles from "../../styles/RegisterStyles";
 import { useNavigation } from "@react-navigation/native";
@@ -29,30 +28,32 @@ const RegisterScreen = () => {
     }
 
     try {
-      // Verificar si ya existe un usuario con esa cédula
-      const q = query(collection(db, "usuarios"), where("cedula", "==", cedula));
-      const querySnapshot = await getDocs(q);
-
       // Crear usuario en Firebase Auth
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      if (!querySnapshot.empty) {
-        // ✅ Usuario ya existe → actualizar campos sin tocar el rol
-        const docRef = querySnapshot.docs[0].ref;
+      // Referencia al documento por cédula
+      const userDocRef = doc(db, "usuarios", cedula);
+      const existingDoc = await getDoc(userDocRef);
 
-        await updateDoc(docRef, {
+      if (existingDoc.exists()) {
+        // Usuario ya existe → actualizar datos, conservar rol
+        const datosExistentes = existingDoc.data();
+        const rolActual = datosExistentes.rol || "cliente";
+
+        await updateDoc(userDocRef, {
           uid: user.uid,
           email: user.email,
           nombre,
           apellido,
-          actualizadoEn: new Date()
+          actualizadoEn: new Date(),
+          rol: rolActual,
         });
 
-        console.log("✅ Usuario existente actualizado (rol preservado)");
+        console.log("✅ Usuario existente actualizado con rol:", rolActual);
       } else {
-        // ✅ Usuario nuevo → crear nuevo documento con cédula como ID
-        await setDoc(doc(db, "usuarios", cedula), {
+        // Usuario nuevo → crear documento con rol por defecto
+        await setDoc(userDocRef, {
           uid: user.uid,
           cedula,
           nombre,
@@ -62,12 +63,12 @@ const RegisterScreen = () => {
           creadoEn: new Date()
         });
 
-        console.log("✅ Nuevo usuario registrado");
+        console.log("✅ Nuevo usuario creado con rol: cliente");
       }
 
-      navigation.replace("Home"); // o "Login" si deseas volver al login
+      navigation.replace("Home");
     } catch (err) {
-      console.error("🔴 Error al registrar:", err);
+      console.error("🔴 Error al registrar:", err.message);
       setError("Error al registrarse. Intenta de nuevo.");
     }
   };

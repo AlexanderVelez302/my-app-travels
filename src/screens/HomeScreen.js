@@ -1,30 +1,27 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, Image, Platform, ScrollView, Dimensions, ImageBackground } from "react-native";
+import { View, Text, Platform, Dimensions, ScrollView } from "react-native";
 import MapView, { Marker } from "react-native-maps";
-import Icon from 'react-native-vector-icons/Ionicons'; 
-import * as Location from 'expo-location';
-import { LinearGradient } from 'expo-linear-gradient';
+import * as Location from "expo-location";
+import HeaderNav from "../components/HeaderNavBar";
+import styles from "../styles/HomeStyles";
 import { db } from "../constants/firebaseConfig";
 import { collection, getDocs } from "firebase/firestore";
-import { useAuth } from "../screens/auth/AuthContext";
-import styles from "../styles/HomeStyles"; // Importa los estilos
 
 const { width, height } = Dimensions.get("window");
 
 const HomeScreen = ({ navigation }) => {
-  const { user } = useAuth();
   const [location, setLocation] = useState(null);
-  const [hoteles, setHoteles] = useState([]);  
+  const [hoteles, setHoteles] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const requestLocationPermission = async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
         console.log("Permiso de ubicación denegado");
         return;
       }
-      let position = await Location.getCurrentPositionAsync({});
+      const position = await Location.getCurrentPositionAsync({});
       setLocation({
         latitude: position.coords.latitude,
         longitude: position.coords.longitude,
@@ -32,6 +29,7 @@ const HomeScreen = ({ navigation }) => {
         longitudeDelta: 0.0421,
       });
     };
+
     requestLocationPermission();
   }, []);
 
@@ -39,8 +37,8 @@ const HomeScreen = ({ navigation }) => {
     const fetchHoteles = async () => {
       try {
         const querySnapshot = await getDocs(collection(db, "hoteles"));
-        const hotelesData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        setHoteles(hotelesData);
+        const data = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        setHoteles(data);
       } catch (error) {
         console.error("Error obteniendo hoteles:", error);
       } finally {
@@ -53,34 +51,9 @@ const HomeScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <ImageBackground source={require("../assets/Tokyo.png")} style={styles.backgroundImage}>
-        <LinearGradient colors={["rgba(0,0,0,0.7)", "transparent"]} start={{ x: 0.5, y: 1 }} end={{ x: 0.5, y: 0 }} style={styles.header}>
-          <Image source={require("../assets/Skynova_white.png")} style={styles.logo} />
-          <Text style={styles.headerText}>SkyNova</Text>
-        </LinearGradient>
-      </ImageBackground>
+      <HeaderNav navigation={navigation} />
 
-      <View style={styles.navBarContainer}>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.navBar}>
-          {[
-            { name: "home-outline", screen: "Home" },
-            { name: "calendar-outline", screen: "Calendar" },
-            { name: "compass-outline", screen: "Explore" },
-            { name: "notifications-outline", screen: "Notifications" }
-          ].map((item, index) => (
-            <TouchableOpacity key={index} style={styles.navButton} onPress={() => navigation.replace(item.screen)}>
-              <Icon name={item.name} size={20} color="#fff" />
-            </TouchableOpacity>
-          ))}
-
-          <TouchableOpacity style={styles.navButton} onPress={() => navigation.replace(user ? "Profile" : "Login")}>
-            <Icon name="person-outline" size={20} color="#fff" />
-          </TouchableOpacity>
-        </ScrollView>
-        <View style={styles.navBarBottomMargin} />
-      </View>
-
-      {Platform.OS !== 'web' ? (
+      {Platform.OS !== "web" ? (
         <MapView
           style={styles.map}
           region={location || {
@@ -91,7 +64,9 @@ const HomeScreen = ({ navigation }) => {
           }}
           showsUserLocation={true}
         >
-          {location && <Marker coordinate={location} title="Tu ubicación" description="Esta es tu ubicación actual" />}
+          {location && (
+            <Marker coordinate={location} title="Tu ubicación" description="Esta es tu ubicación actual" />
+          )}
         </MapView>
       ) : (
         <View style={styles.webMapPlaceholder}>
@@ -101,7 +76,6 @@ const HomeScreen = ({ navigation }) => {
 
       <View style={styles.hotelInfo}>
         <Text style={styles.hotelTitle}>Hoteles Disponibles</Text>
-
         {loading ? (
           <Text>Cargando hoteles...</Text>
         ) : hoteles.length > 0 ? (
