@@ -112,5 +112,3 @@ npm install react-native-maps@1.18.0
 ```
 
 ---
-
-¿Quieres agregar capturas de pantalla, un demo en video o una sección de preguntas frecuentes (FAQ)? Puedo ayudarte a incluirlo también.
