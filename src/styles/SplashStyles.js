@@ -1,9 +1,9 @@
 import { StyleSheet } from "react-native";
 
-export const splashStyles = StyleSheet.create({
+export default StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#1E90FF",
+    backgroundColor: "#1E90FF", // Azul vibrante
     alignItems: "center",
     justifyContent: "center",
   },
@@ -11,7 +11,7 @@ export const splashStyles = StyleSheet.create({
     width: 150,
     height: 150,
     marginBottom: 20,
-    borderRadius: 75,
+    borderRadius: 75, // Logo redondeado
   },
   text: {
     fontSize: 24,

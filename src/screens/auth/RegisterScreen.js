@@ -83,7 +83,7 @@ const RegisterScreen = () => {
           </LinearGradient>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+        <TouchableOpacity onPress={() => navigation.replace("Login")}>
           <Text style={styles.registerText}>¿Ya tienes cuenta? Inicia sesión</Text>
         </TouchableOpacity>
       </View>

@@ -1,15 +1,14 @@
 import React, { useEffect, useRef } from "react";
-import { View, Text, Animated } from "react-native";
-import { splashStyles as styles } from "../styles/SplashStyles"; // Asegúrate que este archivo existe
-import { useNavigation } from "@react-navigation/native"; // ✅ Importar useNavigation
+import { View, Text, Animated, Image } from "react-native";
+import styles from "../styles/SplashStyles"; // Archivo de estilos separado
+import { useAuth } from "./auth/AuthContext"; // Ajusta la ruta si es necesario
 
-const SplashScreen = () => {
-  const fadeAnim = useRef(new Animated.Value(0)).current; // Animación de opacidad
-  const scaleAnim = useRef(new Animated.Value(0.5)).current; // Animación de escala
-  const navigation = useNavigation(); // ✅ Usar hook para acceder a navigation
+const SplashScreen = ({ navigation }) => {
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const scaleAnim = useRef(new Animated.Value(0.5)).current;
+  const { user } = useAuth();
 
   useEffect(() => {
-    // Animaciones en paralelo
     Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 1,
@@ -23,25 +22,24 @@ const SplashScreen = () => {
       }),
     ]).start();
 
-    // Ir a la pantalla principal tras 3.5 segundos
-    const timeout = setTimeout(() => {
-      navigation.replace("Home"); // ✅ Redirige a la pantalla "Home"
+    setTimeout(() => {
+      if (user) {
+        navigation.replace("Home");
+      } else {
+        navigation.replace("Login");
+      }
     }, 3500);
-
-    return () => clearTimeout(timeout); // Limpieza
   }, []);
 
   return (
     <View style={styles.container}>
       <Animated.Image
-        source={require("../assets/Skynova_white.png")} // ✅ Revisa que la ruta esté correcta
+        source={require("../assets/Skynova_white.png")}
         style={[
           styles.logo,
-          {
-            opacity: fadeAnim,
-            transform: [{ scale: scaleAnim }],
-          },
+          { opacity: fadeAnim, transform: [{ scale: scaleAnim }] },
         ]}
+        resizeMode="contain"
       />
       <Text style={styles.text}>Bienvenido a SkyNova</Text>
     </View>

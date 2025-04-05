@@ -68,12 +68,12 @@ const HomeScreen = ({ navigation }) => {
             { name: "compass-outline", screen: "Explore" },
             { name: "notifications-outline", screen: "Notifications" }
           ].map((item, index) => (
-            <TouchableOpacity key={index} style={styles.navButton} onPress={() => navigation.navigate(item.screen)}>
+            <TouchableOpacity key={index} style={styles.navButton} onPress={() => navigation.replace(item.screen)}>
               <Icon name={item.name} size={20} color="#fff" />
             </TouchableOpacity>
           ))}
 
-          <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate(user ? "Profile" : "Login")}>
+          <TouchableOpacity style={styles.navButton} onPress={() => navigation.replace(user ? "Profile" : "Login")}>
             <Icon name="person-outline" size={20} color="#fff" />
           </TouchableOpacity>
         </ScrollView>
