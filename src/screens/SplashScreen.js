@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
-import { View, Text, StyleSheet, Animated } from "react-native";
+import { View, Text, Animated } from "react-native";
+import { splashStyles as styles } from "../styles/SplashStyles"; // Importamos los estilos
 
 const SplashScreen = ({ navigation }) => {
   const fadeAnim = useRef(new Animated.Value(0)).current; // Animación de opacidad
@@ -20,7 +21,7 @@ const SplashScreen = ({ navigation }) => {
       }),
     ]).start();
 
-    // Simular carga y navegar a la pantalla principal
+    // Simular carga y navegar a la pantalla principal después de 3.5 segundos
     setTimeout(() => {
       navigation.replace("Home"); // Cambia "Home" por tu pantalla principal
     }, 3500);
@@ -29,7 +30,7 @@ const SplashScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Animated.Image
-        source={require("../../assets/Skynova_white.png")} // Agrega el logo en assets
+        source={require("../../assets/Skynova_white.png")} // Asegúrate de tener esta imagen en "assets"
         style={[styles.logo, { opacity: fadeAnim, transform: [{ scale: scaleAnim }] }]}
       />
       <Text style={styles.text}>Bienvenido a SkyNova</Text>
@@ -38,23 +39,3 @@ const SplashScreen = ({ navigation }) => {
 };
 
 export default SplashScreen;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#1E90FF",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  logo: {
-    width: 150,
-    height: 150,
-    marginBottom: 20,
-    borderRadius: 75, // Aplicar redondeo al logo
-  },
-  text: {
-    fontSize: 24,
-    color: "#fff",
-    fontWeight: "bold",
-  },
-});
