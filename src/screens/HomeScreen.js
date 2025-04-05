@@ -53,9 +53,9 @@ const HomeScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <ImageBackground source={require("../../assets/Tokyo.png")} style={styles.backgroundImage}>
+      <ImageBackground source={require("../assets/Tokyo.png")} style={styles.backgroundImage}>
         <LinearGradient colors={["rgba(0,0,0,0.7)", "transparent"]} start={{ x: 0.5, y: 1 }} end={{ x: 0.5, y: 0 }} style={styles.header}>
-          <Image source={require("../../assets/Skynova_white.png")} style={styles.logo} />
+          <Image source={require("../assets/Skynova_white.png")} style={styles.logo} />
           <Text style={styles.headerText}>SkyNova</Text>
         </LinearGradient>
       </ImageBackground>

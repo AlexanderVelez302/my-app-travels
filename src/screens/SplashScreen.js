@@ -1,13 +1,15 @@
 import React, { useEffect, useRef } from "react";
 import { View, Text, Animated } from "react-native";
-import { splashStyles as styles } from "../styles/SplashStyles"; // Importamos los estilos
+import { splashStyles as styles } from "../styles/SplashStyles"; // Asegúrate que este archivo existe
+import { useNavigation } from "@react-navigation/native"; // ✅ Importar useNavigation
 
-const SplashScreen = ({ navigation }) => {
+const SplashScreen = () => {
   const fadeAnim = useRef(new Animated.Value(0)).current; // Animación de opacidad
   const scaleAnim = useRef(new Animated.Value(0.5)).current; // Animación de escala
+  const navigation = useNavigation(); // ✅ Usar hook para acceder a navigation
 
   useEffect(() => {
-    // Efecto de fade-in y scale-up
+    // Animaciones en paralelo
     Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 1,
@@ -21,17 +23,25 @@ const SplashScreen = ({ navigation }) => {
       }),
     ]).start();
 
-    // Simular carga y navegar a la pantalla principal después de 3.5 segundos
-    setTimeout(() => {
-      navigation.replace("Home"); // Cambia "Home" por tu pantalla principal
+    // Ir a la pantalla principal tras 3.5 segundos
+    const timeout = setTimeout(() => {
+      navigation.replace("Home"); // ✅ Redirige a la pantalla "Home"
     }, 3500);
+
+    return () => clearTimeout(timeout); // Limpieza
   }, []);
 
   return (
     <View style={styles.container}>
       <Animated.Image
-        source={require("../../assets/Skynova_white.png")} // Asegúrate de tener esta imagen en "assets"
-        style={[styles.logo, { opacity: fadeAnim, transform: [{ scale: scaleAnim }] }]}
+        source={require("../assets/Skynova_white.png")} // ✅ Revisa que la ruta esté correcta
+        style={[
+          styles.logo,
+          {
+            opacity: fadeAnim,
+            transform: [{ scale: scaleAnim }],
+          },
+        ]}
       />
       <Text style={styles.text}>Bienvenido a SkyNova</Text>
     </View>
