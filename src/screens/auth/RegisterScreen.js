@@ -10,9 +10,12 @@ import {
 } from "firebase/firestore";
 import styles from "../../styles/RegisterStyles";
 import { useNavigation } from "@react-navigation/native";
+import { useAuth } from "../auth/AuthContext"; // ✅ Importa el contexto
 
 const RegisterScreen = () => {
   const navigation = useNavigation();
+  const { setUserData } = useAuth(); // ✅ Para actualizar el contexto global
+
   const [cedula, setCedula] = useState("");
   const [nombre, setNombre] = useState("");
   const [apellido, setApellido] = useState("");
@@ -32,7 +35,6 @@ const RegisterScreen = () => {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      // Referencia al documento por cédula
       const userDocRef = doc(db, "usuarios", cedula);
       const existingDoc = await getDoc(userDocRef);
 
@@ -66,7 +68,14 @@ const RegisterScreen = () => {
         console.log("✅ Nuevo usuario creado con rol: cliente");
       }
 
+      // 🔄 Obtener el documento actualizado para el contexto
+      const updatedDoc = await getDoc(userDocRef);
+      if (updatedDoc.exists()) {
+        setUserData(updatedDoc.data()); // ✅ Aquí actualizamos el contexto global
+      }
+
       navigation.replace("Home");
+
     } catch (err) {
       console.error("🔴 Error al registrar:", err.message);
       setError("Error al registrarse. Intenta de nuevo.");
