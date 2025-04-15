@@ -14,7 +14,7 @@
     "@react-navigation/native": "^7.1.4",
     "@react-navigation/stack": "^7.2.8",
     "eslint-define-config": "^2.1.0",
-    "expo": "~52.0.43",
+    "expo": "~52.0.46",
     "expo-linear-gradient": "^14.0.2",
     "expo-location": "^18.0.10",
     "expo-status-bar": "~2.0.1",

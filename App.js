@@ -1,6 +1,6 @@
 import React from "react";
 import { AuthProvider } from "./src/screens/auth/AuthContext";
-import AppNavigator from "./src/navigation/AppNavigator"; // Asegurar la "N" mayúscula
+import AppNavigator from "./src/navigation/AppNavigator"; 
 
 const App = () => {
   return (
