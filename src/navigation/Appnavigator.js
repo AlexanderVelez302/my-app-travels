@@ -8,6 +8,11 @@ import HomeScreen from "../screens/HomeScreen";
 import LoginScreen from "../screens/auth/LoginScreen";
 import RegisterScreen from "../screens/auth/RegisterScreen";
 import ProfileScreen from "../screens/ProfileScreen"; // 👈 IMPORTANTE: importar la pantalla de perfil
+import AddUserScreen from "../screens/AdminPanel/AddUserScreen";
+import EditUserScreen from "../screens/AdminPanel/EditUserScreen";
+import DeleteUserScreen from "../screens/AdminPanel/DeleteUserScreen";
+import ViewUserScreen from "../screens/AdminPanel/ViewUserScreen"; // Asegúrate de importar esta pantalla
+
 
 const Stack = createStackNavigator();
 
@@ -20,6 +25,10 @@ const AppNavigator = () => {
         <Stack.Screen name="Register" component={RegisterScreen} />
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Profile" component={ProfileScreen} /> 
+        <Stack.Screen name="AgregarUsuario" component={AddUserScreen} />
+        <Stack.Screen name="EditarUsuario" component={EditUserScreen} />
+        <Stack.Screen name="EliminarUsuario" component={DeleteUserScreen} />
+        <Stack.Screen name="BuscarUsuario" component={ViewUserScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
