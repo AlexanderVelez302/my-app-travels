@@ -45,5 +45,3 @@ const obtenerRolUsuarioPorUID = async (uid) => {
     return null;
   }
 };
-
-export { app, auth, db, storage, obtenerRolUsuarioPorUID };

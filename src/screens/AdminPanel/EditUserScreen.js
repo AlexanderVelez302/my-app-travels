@@ -10,7 +10,7 @@ import {
   Platform,
 } from "react-native";
 import { getDoc, doc, updateDoc } from "firebase/firestore";
-import { db } from "../../constants/firebaseConfig";
+import { db } from "../../services/firebaseConfig";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useNavigation } from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons";

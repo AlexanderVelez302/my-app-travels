@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import {View,Text,TextInput,TouchableOpacity,Alert,ScrollView,Platform,KeyboardAvoidingView,} from "react-native";
 import { doc, setDoc, getDoc } from "firebase/firestore";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { db, auth } from "../../constants/firebaseConfig";
+import { db, auth } from "../../services/firebaseConfig";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import styles from "../../styles/AdminPanelStyles/AddUserStyles";
 import { useNavigation } from "@react-navigation/native";

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, ImageBackground, Platform } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { auth, db } from "../../constants/firebaseConfig";
+import { auth, db } from "../../services/firebaseConfig";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc, getDoc, updateDoc } from "firebase/firestore";
 import styles from "../../styles/RegisterStyles";

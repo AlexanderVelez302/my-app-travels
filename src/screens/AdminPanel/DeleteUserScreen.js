@@ -12,7 +12,7 @@ import {
   KeyboardAvoidingView
 } from "react-native";
 import { getDoc, doc, deleteDoc } from "firebase/firestore";
-import { db } from "../../constants/firebaseConfig";
+import { db } from "../../services/firebaseConfig";
 import { useNavigation } from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import styles from "../../styles/AdminPanelStyles/DeleteUserStyles";
