@@ -1,130 +1,130 @@
-# 🎿 SkiNova - Plataforma de Viajes Nacionales
+# 🏝️ SkiNova - Plataforma de Reservas y Guías de Viaje
 
 ## 📖 Descripción
-**SkiNova** es una aplicación móvil y próximamente web que facilita la planificación de **viajes nacionales en Colombia**. Permite a los usuarios **reservar hoteles**, **gestionar transporte terrestre o aéreo**, y **explorar guías turísticas** con recomendaciones locales. Con una interfaz simple y un enfoque centrado en el usuario, SkiNova busca ser tu copiloto digital ideal.
+**SkiNova** es una aplicación móvil (con soporte web en desarrollo) diseñada para facilitar la planificación de **viajes nacionales**. Los usuarios pueden **reservar hoteles**, **gestionar transporte** y **explorar recomendaciones de destinos turísticos** en Colombia. Ofrece una experiencia fluida e intuitiva para planificar viajes cómodos, organizados y a la medida.
 
-## ✨ Características Actuales
-- 🔒 Registro e inicio de sesión con correo/contraseña (Firebase Auth)
-- 🧑‍💼 Panel de administración para gestión de usuarios (solo admins)
-- ⚙️ Backend funcional con Firebase Admin SDK para operaciones seguras
-- 📍 Visualización de ubicación en mapa con Google Maps
-- 🧭 Navegación fluida entre pantallas (React Navigation)
-- 🔐 Persistencia de sesión automática
+---
 
-## 🧪 Características en Desarrollo
-- 🔍 Búsqueda de hoteles y destinos
-- 📅 Calendario interactivo para seleccionar fechas de viaje
-- 🚗 Reservas de transporte terrestre/aéreo
-- 🏨 Sistema de reservas con disponibilidad en tiempo real
-- 📢 Notificaciones sobre promociones y recordatorios de viaje
-- 🌐 Acceso web desde navegador (en revisión)
-- 🎨 Mejoras de diseño en pantallas de login y registro
-- 🌍 Modo offline (pendiente)
+## ✨ Características
+
+- 🔍 Búsqueda de hoteles mediante un **mapa interactivo**.
+- 🏨 Reserva de hospedajes con disponibilidad en tiempo real.
+- 🚗 Gestión de transporte dentro del destino.
+- 📍 Guías turísticas con recomendaciones de lugares para visitar.
+- 📆 Calendario para selección de fechas de viaje.
+- 🛎️ Notificaciones sobre promociones y recordatorios.
+- 🔐 Sistema de autenticación (email/password habilitado).
+- 🎯 Panel de administración para gestión de usuarios.
+- 🧭 Interfaz responsive para móvil (web aún en construcción).
+
+---
 
 ## 🛠️ Tecnologías Utilizadas
-- **Frontend:** React Native (Expo)
-- **Backend:** Node.js + Firebase Admin SDK
-- **Base de datos:** Firestore (Firebase)
-- **Autenticación:** Firebase Auth
-- **Mapas y Geolocalización:** Google Maps API
-- **Prototipo/documentación previa:** SQL Server
+
+- **Frontend:** React Native (Expo SDK 54)
+- **Backend:** Firebase (Auth, Firestore, Storage)
+- **Autenticación:** Firebase Auth (Email/Password activo)
+- **Mapas y Geolocalización:** Google Maps API + Expo Location
+- **Control de versiones:** Git + GitHub
+- **Variables de entorno:** `.env` + `expo-constants`
+- **Base de datos previa:** SQL Server (en documentación de prototipo)
 
 ---
 
 ## ⚙️ Estructura del Proyecto
 
 ```
+
 SkiNova/
 │
-├── assets/                     # Imágenes globales
+├── assets/                     # Imágenes y recursos globales
 ├── src/
-│   ├── assets/                 # Recursos gráficos adicionales
-│   ├── constants/              # Configuraciones (ej. firebaseConfig.js)
-│   ├── navigation/             # Rutas y navegación
+│   ├── constants/              # Configuraciones generales (ej. firebaseConfig.js)
+│   ├── navigation/             # Navegación de pantallas (AppNavigator.js)
 │   ├── screens/
-│   │   ├── auth/               # Login y Registro
-│   │   ├── AdminPanel/         # Pantallas solo para admins
-│   │   ├── Home/               # Pantalla principal del usuario
-│   │   ├── Search/             # Búsqueda (en desarrollo)
-│   │   ├── Calendar/           # Calendario de fechas (en desarrollo)
-│   │   ├── Notifications/      # Notificaciones (en desarrollo)
-│   │   └── styles/             # Estilos individuales por pantalla
-│   └── styles/                 # Estilos globales
+│   │   ├── auth/               # Login, Registro, contexto de sesión
+│   │   ├── Home/               # Pantalla principal
+│   │   ├── Busqueda/           # Pantalla de búsqueda con mapa
+│   │   ├── Calendario/         # Selección de fechas
+│   │   ├── Notificaciones/     # Mensajes y recordatorios
+│   │   └── styles/             # Estilos por pantalla
+│   └── styles/                 # Estilos globales (ej. colores, fuentes)
+├── .env                        # Variables sensibles (NO subir)
 ├── App.js
 ├── app.json
 ├── package.json
 └── .gitignore
-```
+
+````
 
 ---
 
 ## 🚀 Instalación y Ejecución
 
 ### 🔹 Requisitos Previos
-- Tener instalado **Node.js** y **npm** (o **yarn**)
+
+- Tener instalado **Node.js** y **npm** (o **yarn**).
 - Tener instalado **Expo CLI**:
+
 ```bash
 npm install -g expo-cli
-```
+````
+
+---
 
 ### 🔹 Clonar el repositorio
+
 ```bash
-git clone https://github.com/AlexanderVelez302/SkiNova.git
-cd SkiNova
+git clone https://github.com/AlexanderVelez302/skinova.git
+cd skinova
 ```
 
+---
+
 ### 🔹 Instalar dependencias
+
 ```bash
 npm install
 ```
 
 ---
 
-## 🔐 Configuración de Firebase
+### 🔹 Crear archivo `.env`
 
-> ⚠️ El archivo `firebaseConfig.js` ubicado en `src/constants/` **no se incluye en el repositorio** por motivos de seguridad. Debes crearlo tú mismo con tus credenciales.
+Crea un archivo `.env` en la raíz del proyecto y agrega tus claves de Firebase:
 
-```javascript
-// src/constants/firebaseConfig.js
-import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
-
-const firebaseConfig = {
-  apiKey: "TU_API_KEY",
-  authDomain: "TU_AUTH_DOMAIN",
-  projectId: "TU_PROJECT_ID",
-  storageBucket: "TU_STORAGE_BUCKET",
-  messagingSenderId: "TU_MESSAGING_SENDER_ID",
-  appId: "TU_APP_ID"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-
-export { auth, db };
 ```
+EXPO_PUBLIC_API_KEY=TU_API_KEY
+EXPO_PUBLIC_AUTH_DOMAIN=TU_AUTH_DOMAIN
+EXPO_PUBLIC_PROJECT_ID=TU_PROJECT_ID
+EXPO_PUBLIC_STORAGE_BUCKET=TU_STORAGE_BUCKET
+EXPO_PUBLIC_MESSAGING_SENDER_ID=TU_SENDER_ID
+EXPO_PUBLIC_APP_ID=TU_APP_ID
+```
+
+> 🔒 Este archivo está en `.gitignore` y **no debe subirse** a GitHub.
 
 ---
 
-## ▶️ Ejecución del Proyecto
-
-Una vez configurado Firebase, ejecuta:
+### ▶️ Ejecutar la app
 
 ```bash
 npx expo start
 ```
 
-Puedes abrir la app desde tu dispositivo móvil usando **Expo Go** o desde un emulador Android/iOS.
+Abre el proyecto con **Expo Go** en tu celular o en un emulador Android/iOS.
 
 ---
 
 ## 🧾 Notas Adicionales
 
-- Si aparecen advertencias relacionadas con `react-native-maps`:
-```bash
-npm install react-native-maps@1.18.0
-```
+* La autenticación con **Google aún no está implementada**. Solo está disponible login con email y contraseña.
+* El backend ya está migrado a Firebase usando **Firebase Admin SDK** para operaciones administrativas (como eliminar usuarios desde el panel admin).
+* Si necesitas usar funcionalidades avanzadas como Analytics, se debe reactivar `measurementId`.
 
-- El inicio de sesión con Google, Apple y otros métodos sociales aún **no está implementado**.
+---
+
+## ✉️ Contacto
+
+Desarrollado por **Alexander Vélez**
+GitHub: [@AlexanderVelez302](https://github.com/AlexanderVelez302)x
