@@ -74,49 +74,45 @@ const RegisterScreen = () => {
     return true;
   };
 
-  const handleRegister = async () => {
-    setError(""); // limpiar errores previos
-    if (!validarCampos()) return;
-  
-    try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
-  
-      const userDocRef = doc(db, "usuarios", cedula);
-      const existingDoc = await getDoc(userDocRef);
-  
-      if (existingDoc.exists()) {
-        // Si ya existe, actualizamos solo con los campos necesarios
-        await updateDoc(userDocRef, {
-          nombre,
-          apellido,
-          email,
-          fechaNacimiento: fechaNacimiento.toISOString().split("T")[0],
-          rol: "cliente",
-        });
-      } else {
-        // Si no existe, lo creamos desde cero
-        await setDoc(userDocRef, {
-          cedula,
-          nombre,
-          apellido,
-          email,
-          fechaNacimiento: fechaNacimiento.toISOString().split("T")[0],
-          rol: "cliente",
-        });
-      }
-  
-      const updatedDoc = await getDoc(userDocRef);
-      if (updatedDoc.exists()) {
-        setUserData(updatedDoc.data());
-      }
-  
-      navigation.replace("Home");
-    } catch (err) {
-      console.error("🔴 Error al registrar:", err.message);
-      setError("No se pudo completar el registro. Intenta de nuevo.");
+ const handleRegister = async () => {
+  setError(""); // limpiar errores previos
+  if (!validarCampos()) return;
+
+  try {
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+
+    const userDocRef = doc(db, "usuarios", cedula);
+    const existingDoc = await getDoc(userDocRef);
+
+    const userData = {
+      cedula,
+      nombre,
+      apellido,
+      email,
+      fechaNacimiento: fechaNacimiento.toISOString().split("T")[0],
+      rol: "cliente",
+      uid: user.uid, // nuevo campo: guardamos el UID del usuario
+    };
+
+    if (existingDoc.exists()) {
+      await updateDoc(userDocRef, userData);
+    } else {
+      await setDoc(userDocRef, userData);
     }
-  };
+
+    const updatedDoc = await getDoc(userDocRef);
+    if (updatedDoc.exists()) {
+      setUserData(updatedDoc.data());
+    }
+
+    navigation.replace("Home");
+  } catch (err) {
+    console.error("🔴 Error al registrar:", err.message);
+    setError("No se pudo completar el registro. Intenta de nuevo.");
+  }
+};
+
   
 
   return (
