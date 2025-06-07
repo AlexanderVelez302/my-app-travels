@@ -1,40 +1,55 @@
-
-# 🏝️ MyApp Travels - Plataforma de Reservas y Guías de Viaje
+# 🎿 SkiNova - Plataforma de Viajes Nacionales
 
 ## 📖 Descripción
-**MyApp Travels** es una aplicación móvil y web diseñada para facilitar la planificación de viajes nacionales. Los usuarios pueden **reservar hoteles**, **gestionar transporte** y **explorar recomendaciones de destinos turísticos** dentro del país. La app ofrece una experiencia fluida para planificar viajes cómodos y organizados.
+**SkiNova** es una aplicación móvil y próximamente web que facilita la planificación de **viajes nacionales en Colombia**. Permite a los usuarios **reservar hoteles**, **gestionar transporte terrestre o aéreo**, y **explorar guías turísticas** con recomendaciones locales. Con una interfaz simple y un enfoque centrado en el usuario, SkiNova busca ser tu copiloto digital ideal.
 
-## ✨ Características
-- 🔍 Búsqueda de hoteles mediante un mapa interactivo.
-- 🏨 Reserva de hospedajes con disponibilidad en tiempo real.
-- 🚗 Gestión de transporte dentro del destino.
-- 📍 Guías turísticas con recomendaciones de lugares.
-- 📶 Modo offline para acceso sin conexión.
-- 📱 Interfaz intuitiva y responsive para móvil y web.
+## ✨ Características Actuales
+- 🔒 Registro e inicio de sesión con correo/contraseña (Firebase Auth)
+- 🧑‍💼 Panel de administración para gestión de usuarios (solo admins)
+- ⚙️ Backend funcional con Firebase Admin SDK para operaciones seguras
+- 📍 Visualización de ubicación en mapa con Google Maps
+- 🧭 Navegación fluida entre pantallas (React Navigation)
+- 🔐 Persistencia de sesión automática
+
+## 🧪 Características en Desarrollo
+- 🔍 Búsqueda de hoteles y destinos
+- 📅 Calendario interactivo para seleccionar fechas de viaje
+- 🚗 Reservas de transporte terrestre/aéreo
+- 🏨 Sistema de reservas con disponibilidad en tiempo real
+- 📢 Notificaciones sobre promociones y recordatorios de viaje
+- 🌐 Acceso web desde navegador (en revisión)
+- 🎨 Mejoras de diseño en pantallas de login y registro
+- 🌍 Modo offline (pendiente)
 
 ## 🛠️ Tecnologías Utilizadas
 - **Frontend:** React Native (Expo)
-- **Backend:** Firebase Realtime Database / Firestore
+- **Backend:** Node.js + Firebase Admin SDK
+- **Base de datos:** Firestore (Firebase)
 - **Autenticación:** Firebase Auth
 - **Mapas y Geolocalización:** Google Maps API
-- **Base de datos anterior:** SQL Server (solo en documentación/prototipo)
+- **Prototipo/documentación previa:** SQL Server
 
 ---
 
 ## ⚙️ Estructura del Proyecto
 
 ```
-my-app-travels/
+SkiNova/
 │
 ├── assets/                     # Imágenes globales
 ├── src/
 │   ├── assets/                 # Recursos gráficos adicionales
-│   ├── constants/             # Configuraciones (ej. firebaseConfig.js)
-│   ├── navigation/            # Rutas y navegación (AppNavigator.js)
+│   ├── constants/              # Configuraciones (ej. firebaseConfig.js)
+│   ├── navigation/             # Rutas y navegación
 │   ├── screens/
-│   │   ├── auth/              # Pantallas de Login y Registro + AuthContext
-│   │   └── styles/            # Archivos de estilos para cada pantalla
-│   └── styles/                # Estilos generales
+│   │   ├── auth/               # Login y Registro
+│   │   ├── AdminPanel/         # Pantallas solo para admins
+│   │   ├── Home/               # Pantalla principal del usuario
+│   │   ├── Search/             # Búsqueda (en desarrollo)
+│   │   ├── Calendar/           # Calendario de fechas (en desarrollo)
+│   │   ├── Notifications/      # Notificaciones (en desarrollo)
+│   │   └── styles/             # Estilos individuales por pantalla
+│   └── styles/                 # Estilos globales
 ├── App.js
 ├── app.json
 ├── package.json
@@ -46,7 +61,7 @@ my-app-travels/
 ## 🚀 Instalación y Ejecución
 
 ### 🔹 Requisitos Previos
-- Tener instalado **Node.js** y **npm** (o **yarn**).
+- Tener instalado **Node.js** y **npm** (o **yarn**)
 - Tener instalado **Expo CLI**:
 ```bash
 npm install -g expo-cli
@@ -54,8 +69,8 @@ npm install -g expo-cli
 
 ### 🔹 Clonar el repositorio
 ```bash
-git clone https://github.com/AlexanderVelez302/my-app-travels.git
-cd my-app-travels
+git clone https://github.com/AlexanderVelez302/SkiNova.git
+cd SkiNova
 ```
 
 ### 🔹 Instalar dependencias
@@ -67,13 +82,13 @@ npm install
 
 ## 🔐 Configuración de Firebase
 
-### ⚠️ Nota:
-El archivo `firebaseConfig.js` ubicado en `src/constants/` **no se sube al repositorio por seguridad**. Debes crearlo manualmente con tu configuración personal de Firebase:
+> ⚠️ El archivo `firebaseConfig.js` ubicado en `src/constants/` **no se incluye en el repositorio** por motivos de seguridad. Debes crearlo tú mismo con tus credenciales.
 
 ```javascript
 // src/constants/firebaseConfig.js
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: "TU_API_KEY",
@@ -86,29 +101,30 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const db = getFirestore(app);
 
-export { auth };
+export { auth, db };
 ```
 
 ---
 
 ## ▶️ Ejecución del Proyecto
 
-Una vez configurado Firebase:
+Una vez configurado Firebase, ejecuta:
 
 ```bash
 npx expo start
 ```
 
-Puedes abrirlo desde tu celular usando la app de **Expo Go**, o desde un emulador Android/iOS.
+Puedes abrir la app desde tu dispositivo móvil usando **Expo Go** o desde un emulador Android/iOS.
 
 ---
 
 ## 🧾 Notas Adicionales
 
-- Si recibes advertencias de versiones incompatibles (por ejemplo, con `react-native-maps`), puedes instalar la versión recomendada por Expo:
+- Si aparecen advertencias relacionadas con `react-native-maps`:
 ```bash
 npm install react-native-maps@1.18.0
 ```
 
----
+- El inicio de sesión con Google, Apple y otros métodos sociales aún **no está implementado**.

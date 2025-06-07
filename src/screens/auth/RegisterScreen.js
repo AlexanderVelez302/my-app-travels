@@ -92,7 +92,7 @@ const RegisterScreen = () => {
       email,
       fechaNacimiento: fechaNacimiento.toISOString().split("T")[0],
       rol: "cliente",
-      uid: user.uid, // nuevo campo: guardamos el UID del usuario
+      uid: user.uid, // fundamental para el backend
     };
 
     if (existingDoc.exists()) {
