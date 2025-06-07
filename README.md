@@ -21,7 +21,7 @@
 
 ## 🛠️ Tecnologías Utilizadas
 
-- **Frontend:** React Native (Expo SDK 54)
+- **Frontend:** React Native (Expo SDK 53)
 - **Backend:** Firebase (Auth, Firestore, Storage)
 - **Autenticación:** Firebase Auth (Email/Password activo)
 - **Mapas y Geolocalización:** Google Maps API + Expo Location
