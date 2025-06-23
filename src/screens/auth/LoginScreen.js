@@ -1,18 +1,12 @@
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  ImageBackground,
-} from "react-native";
+import {View, Text, TextInput,  TouchableOpacity, ImageBackground,} from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import Icon from "react-native-vector-icons/Ionicons";
 import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "../../constants/firebaseConfig";
+import { auth } from "../../services/firebaseConfig";
 import { useAuth } from "../auth/AuthContext";
 import styles from "../../styles/LoginStyles";
-import { obtenerRolUsuarioPorUID } from "../../constants/firebaseConfig";
+import { obtenerRolUsuarioPorUID } from "../../services/firebaseConfig";
 
 const LoginScreen = ({ navigation }) => {
   const { login } = useAuth();

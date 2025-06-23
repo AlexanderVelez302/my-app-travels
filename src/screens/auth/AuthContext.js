@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth";
-import { auth, db } from "../../constants/firebaseConfig";
+import { auth, db } from "../../services/firebaseConfig";
 import { collection, query, where, getDocs } from "firebase/firestore";
 
 const AuthContext = createContext();
@@ -60,10 +60,10 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, userData, setUser, login, logout }}>
+    <AuthContext.Provider value={{ user, userData, setUser, setUserData, login, logout }}>
       {!loading && children}
     </AuthContext.Provider>
-  );
+  );  
 };
 
 export const useAuth = () => useContext(AuthContext);
