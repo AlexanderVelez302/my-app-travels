@@ -81,19 +81,20 @@ const RegisterScreen = () => {
   try {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
+    const token = await user.getIdToken(true);
+    const userData = { cedula, nombre, apellido, email, fechaNacimiento: fechaNacimiento.toISOString().split("T")[0], rol: "cliente" };
+
+    await fetch("http://192.168.1.3:5000/api/usuarios", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(userData),
+    });
 
     const userDocRef = doc(db, "usuarios", cedula);
     const existingDoc = await getDoc(userDocRef);
-
-    const userData = {
-      cedula,
-      nombre,
-      apellido,
-      email,
-      fechaNacimiento: fechaNacimiento.toISOString().split("T")[0],
-      rol: "cliente",
-      uid: user.uid, // fundamental para el backend
-    };
 
     if (existingDoc.exists()) {
       await updateDoc(userDocRef, userData);
