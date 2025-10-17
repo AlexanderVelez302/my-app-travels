@@ -7,7 +7,7 @@ import {
   TouchableWithoutFeedback
 } from "react-native";
 import styles from "../styles/AdminPanelStyles";
-import Icon from "react-native-vector-icons/Ionicons";
+import { Ionicons as Icon } from "@expo/vector-icons";
 
 const AdminPanelModal = ({ visible, onClose, navigation }) => {
   return (

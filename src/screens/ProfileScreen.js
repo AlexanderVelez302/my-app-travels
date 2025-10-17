@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import Icon from "react-native-vector-icons/Ionicons";
+import { Ionicons as Icon } from "@expo/vector-icons";
 import { useAuth } from "./auth/AuthContext";
 import HeaderNav from "../components/HeaderNavBar";
 import AdminPanelModal from "../components/AdminPanelModal"; // ✅ Importa el modal

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import {View, Text, TextInput,  TouchableOpacity, ImageBackground,} from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import Icon from "react-native-vector-icons/Ionicons";
+import { Ionicons as Icon } from "@expo/vector-icons";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../../services/firebaseConfig";
 import { useAuth } from "../auth/AuthContext";
