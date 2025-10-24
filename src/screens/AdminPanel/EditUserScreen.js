@@ -13,7 +13,7 @@ import { getDoc, doc, updateDoc } from "firebase/firestore";
 import { db } from "../../services/firebaseConfig";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useNavigation } from "@react-navigation/native";
-import Ionicons from "react-native-vector-icons/Ionicons";
+import { Ionicons as Icon } from "@expo/vector-icons";
 import styles from "../../styles/AdminPanelStyles/EditUserStyles";
 
 const EditUserScreen = () => {
@@ -89,7 +89,7 @@ const EditUserScreen = () => {
         onPress={() => navigation.goBack()}
         style={styles.backButton}
       >
-        <Ionicons name="arrow-back" size={28} color="#333" />
+        <Icon name="arrow-back" size={28} color="#333" />
       </TouchableOpacity>
 
       <ScrollView contentContainerStyle={styles.container}>

@@ -14,7 +14,7 @@ import {
 import { getDoc, doc, deleteDoc } from "firebase/firestore";
 import { db } from "../../services/firebaseConfig";
 import { useNavigation } from "@react-navigation/native";
-import Ionicons from "react-native-vector-icons/Ionicons";
+import { Ionicons as Icon } from "@expo/vector-icons";
 import styles from "../../styles/AdminPanelStyles/DeleteUserStyles";
 
 const DeleteUserScreen = () => {
@@ -94,7 +94,7 @@ const DeleteUserScreen = () => {
                   onPress={() => navigation.goBack()}
                   style={{ position: "absolute", top: 55, left: 1, zIndex: 10 }}
                 >
-                  <Ionicons name="arrow-back" size={28} color="#333" />
+                  <Icon name="arrow-back" size={28} color="#333" />
                 </TouchableOpacity>
 
           <Text style={styles.title}>Eliminar Usuario</Text>

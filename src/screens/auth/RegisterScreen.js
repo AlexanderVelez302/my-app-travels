@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, ImageBackground, Platform } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { auth, db } from "../../services/firebaseConfig";
+import { auth } from "../../services/firebaseConfig";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { doc, setDoc, getDoc, updateDoc } from "firebase/firestore";
 import styles from "../../styles/RegisterStyles";
 import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../auth/AuthContext";
@@ -74,47 +73,59 @@ const RegisterScreen = () => {
     return true;
   };
 
- const handleRegister = async () => {
-  setError(""); // limpiar errores previos
-  if (!validarCampos()) return;
+  const handleRegister = async () => {
+    setError("");
+    if (!validarCampos()) return;
 
-  try {
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    const user = userCredential.user;
-    const token = await user.getIdToken(true);
-    const userData = { cedula, nombre, apellido, email, fechaNacimiento: fechaNacimiento.toISOString().split("T")[0], rol: "cliente" };
+    try {
+      // 1. Crear usuario en Firebase Auth
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      
+      // 2. Obtener token del usuario
+      const token = await user.getIdToken(true);
+      
+      // 3. Preparar datos
+      const userData = {
+        cedula,
+        nombre,
+        apellido,
+        email,
+        fechaNacimiento: fechaNacimiento.toISOString().split("T")[0],
+        rol: "cliente",
+      };
 
-    await fetch("http://192.168.1.3:5000/api/usuarios", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(userData),
-    });
+      // 4. Enviar datos al backend
+      const response = await fetch("http://192.168.1.4:5000/api/usuarios", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(userData),
+      });
 
-    const userDocRef = doc(db, "usuarios", cedula);
-    const existingDoc = await getDoc(userDocRef);
+      // 5. Manejar respuesta del backend
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        console.error("❌ Error del backend:", response.status, errorData);
+        setError(errorData.message || "Error al crear usuario en el servidor");
+        return;
+      }
 
-    if (existingDoc.exists()) {
-      await updateDoc(userDocRef, userData);
-    } else {
-      await setDoc(userDocRef, userData);
+      const respJson = await response.json();
+      console.log("✅ Usuario creado exitosamente:", respJson);
+      
+      // 6. Guardar datos en contexto y navegar
+      const serverUser = respJson.usuario || userData;
+      setUserData(serverUser);
+      navigation.replace("Home");
+      
+    } catch (err) {
+      console.error("🔴 Error al registrar:", err);
+      setError(err.message || "No se pudo completar el registro. Intenta de nuevo.");
     }
-
-    const updatedDoc = await getDoc(userDocRef);
-    if (updatedDoc.exists()) {
-      setUserData(updatedDoc.data());
-    }
-
-    navigation.replace("Home");
-  } catch (err) {
-    console.error("🔴 Error al registrar:", err.message);
-    setError("No se pudo completar el registro. Intenta de nuevo.");
-  }
-};
-
-  
+  };
 
   return (
     <View style={styles.container}>

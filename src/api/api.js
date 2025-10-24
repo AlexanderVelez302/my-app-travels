@@ -1,4 +1,4 @@
-const BASE_URL = "http://192.168.1.3:5000"; // tu IP local
+const BASE_URL = "http://192.168.1.4:5000"; // tu IP actualizada
 
 export const crearUsuario = async (datos) => {
   try {

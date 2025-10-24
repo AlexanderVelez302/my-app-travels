@@ -14,7 +14,7 @@ import {
 import { getDoc, doc } from "firebase/firestore";
 import { db } from "../../services/firebaseConfig";
 import { useNavigation } from "@react-navigation/native";
-import Ionicons from "react-native-vector-icons/Ionicons";
+import { Ionicons as Icon } from "@expo/vector-icons";
 import styles from "../../styles/AdminPanelStyles/ViewUserStyles";
 
 const ViewUserScreen = () => {
@@ -54,12 +54,16 @@ const ViewUserScreen = () => {
         style={styles.container}
         behavior={Platform.OS === "ios" ? "padding" : "height"}
       >
-        <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-          <Ionicons name="arrow-back" size={24} color="#fff" />
-        </TouchableOpacity>
-
         <ScrollView contentContainerStyle={styles.scrollContainer}>
-          <Text style={styles.title}>Consultar Usuario</Text>
+          {/* Header con botón y título en la misma línea */}
+          <View style={styles.header}>
+            <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+              <Icon name="arrow-back" size={24} color="#000000ff" />
+            </TouchableOpacity>
+            <Text style={styles.title}>Consultar Usuario</Text>
+            {/* Espacio vacío para centrar el título (opcional) */}
+            <View style={{ width: 24 }} />
+          </View>
 
           <TextInput
             style={styles.input}
