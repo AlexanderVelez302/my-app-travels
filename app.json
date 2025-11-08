@@ -1,31 +1,31 @@
 {
   "expo": {
-    "name": "SkiNova",
-    "slug": "SkiNova",
+    "name": "SkyNova",
+    "slug": "SkyNova",
+    "owner": "alexander.velez",
+    "scheme": "myapptravels",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
     "version": "1.0.0",
+
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/Skynova_black - copia.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/splash-icon.png",
-      "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "bundleIdentifier": "com.alexandervelez.myapptravels"
     },
     "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      }
+      "package": "com.alexandervelez.myapptravels"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
-    },
-    "updates": {
-      "enabled": false
+      "favicon": "./assets/Skynova_black - copia.png"
     }
   }
 }

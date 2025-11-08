@@ -1,11 +1,11 @@
 {
-  "name": "skinova",
+  "name": "skynova",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
     "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
     "web": "expo start --web"
   },
   "dependencies": {
@@ -14,9 +14,13 @@
     "@react-navigation/native": "^7.1.4",
     "@react-navigation/stack": "^7.2.8",
     "eslint-define-config": "^2.1.0",
-    "expo": "54.0.20",
+    "expo": "^54.0.23",
+    "expo-apple-authentication": "^8.0.7",
+    "expo-auth-session": "~7.0.8",
+    "expo-constants": "~18.0.10",
     "expo-linear-gradient": "~15.0.7",
     "expo-location": "~19.0.7",
+    "expo-random": "^14.0.1",
     "expo-status-bar": "~3.0.8",
     "firebase": "^11.7.1",
     "firebase-admin": "^13.2.0",

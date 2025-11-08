@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { onAuthStateChanged, signInWithEmailAndPassword, signOut, sendPasswordResetEmail, signInWithCredential, GoogleAuthProvider, FacebookAuthProvider, GithubAuthProvider, OAuthProvider } from "firebase/auth";
 import { auth, db } from "../../services/firebaseConfig";
 import { collection, query, where, getDocs } from "firebase/firestore";
 
@@ -59,8 +59,30 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // reset password por correo
+  const resetPassword = async (email) => {
+    try {
+      await sendPasswordResetEmail(auth, email);
+    } catch (error) {
+      console.error("Error reset password:", error);
+      throw error;
+    }
+  };
+
+  // helper para signIn con credencial (puedes llamar signInWithCredential desde aquí)
+  const signInWithFirebaseCredential = async (credential) => {
+    try {
+      const result = await signInWithCredential(auth, credential);
+      setUser(result.user);
+      return result.user;
+    } catch (error) {
+      console.error("Error signInWithCredential:", error);
+      throw error;
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ user, userData, setUser, setUserData, login, logout }}>
+    <AuthContext.Provider value={{ user, userData, setUser, setUserData, login, logout, resetPassword, signInWithFirebaseCredential }}>
       {!loading && children}
     </AuthContext.Provider>
   );  

@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
-import {View, Text, TextInput,  TouchableOpacity, ImageBackground,} from "react-native";
+import { View, Text, TextInput, TouchableOpacity, ImageBackground } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons as Icon } from "@expo/vector-icons";
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged, GoogleAuthProvider, signInWithCredential } from "firebase/auth";
+import * as Google from "expo-auth-session/providers/google";
+import * as AuthSession from "expo-auth-session";
 import { auth } from "../../services/firebaseConfig";
 import { useAuth } from "../auth/AuthContext";
 import styles from "../../styles/LoginStyles";
@@ -14,6 +16,23 @@ const LoginScreen = ({ navigation }) => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
+  // --- Configuración de Google Auth ---
+const redirectUri = AuthSession.makeRedirectUri({
+  useProxy: true,
+  scheme: "myapptravels",
+});
+
+const [request, response, promptAsync] = Google.useAuthRequest({
+  webClientId: "723830445658-8k5hqvmfootf1hssb9eucnmtr6tg99pq.apps.googleusercontent.com",
+  iosClientId: "723830445658-rsdpc0r5cuf1sd0q1i00n6l84hq466ik.apps.googleusercontent.com",
+  androidClientId: "723830445658-rtacs63ulv3mkpeparfdu6q2c1j65c5u.apps.googleusercontent.com",
+  redirectUri,
+  scopes: ["profile", "email"],
+});
+
+console.log("🔗 Redirect URI final:", redirectUri);
+  // --- Monitoreo de estado de autenticación ---
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -22,24 +41,65 @@ const LoginScreen = ({ navigation }) => {
         console.log("🚫 No hay usuario logueado");
       }
     });
-
-    return () => unsubscribe();
+    return unsubscribe;
   }, []);
+
+  // Redirección que debes agregar en Google Cloud (solo la primera vez)
+console.log("Redirect URI:", AuthSession.makeRedirectUri({
+  useProxy: true,
+  native: "myapptravels://redirect"
+}));
+
+console.log("Full redirect (for Google Cloud):", AuthSession.makeRedirectUri({
+  useProxy: true
+}));
+
+
+  // --- Manejo de respuesta de Google ---
+  useEffect(() => {
+    const signInWithGoogle = async () => {
+      try {
+        if (response?.type === "success") {
+          const { idToken } = response.authentication;
+          if (!idToken) throw new Error("No se recibió idToken de Google.");
+
+          const credential = GoogleAuthProvider.credential(idToken);
+          await signInWithCredential(auth, credential);
+
+          const uid = auth.currentUser.uid;
+          const rol = await obtenerRolUsuarioPorUID(uid);
+          console.log("🔐 Rol obtenido:", rol);
+
+          navigation.replace("Home");
+        }
+      } catch (err) {
+        console.error("Error Google Sign-In:", err);
+        setError("No se pudo iniciar sesión con Google.");
+      }
+    };
+
+    signInWithGoogle();
+  }, [response]);
 
   const handleLogin = async () => {
     try {
       await login(email, password);
-
       const uid = auth.currentUser.uid;
       const rol = await obtenerRolUsuarioPorUID(uid);
-
       console.log("🔐 Rol obtenido:", rol);
-
-      // Por ahora, redirigimos siempre a Home, sin importar el rol
       navigation.replace("Home");
     } catch (err) {
       console.log("🔴 Error de login:", err);
       setError("Correo o contraseña incorrectos");
+    }
+  };
+
+  const handleGooglePress = async () => {
+    try {
+      await promptAsync({ useProxy: true });
+    } catch (err) {
+      console.error("Error al abrir Google Sign-In:", err);
+      setError("Error al iniciar sesión con Google.");
     }
   };
 
@@ -78,16 +138,6 @@ const LoginScreen = ({ navigation }) => {
           onChangeText={setPassword}
         />
 
-        <View style={styles.row}>
-          <TouchableOpacity style={styles.checkboxContainer}>
-            <Icon name="checkmark-circle" size={20} color="#007bff" />
-            <Text style={styles.checkboxText}>Recordarme</Text>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Text style={styles.forgotPassword}>¿Olvidaste tu contraseña?</Text>
-          </TouchableOpacity>
-        </View>
-
         <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
           <LinearGradient
             colors={["#007bff", "#0056b3"]}
@@ -98,14 +148,15 @@ const LoginScreen = ({ navigation }) => {
         </TouchableOpacity>
 
         <Text style={styles.orText}>O ingresa con</Text>
+
         <View style={styles.socialContainer}>
-          {["logo-facebook", "logo-twitter", "logo-google", "logo-apple"].map(
-            (icon, index) => (
-              <TouchableOpacity key={index} style={styles.socialButton}>
-                <Icon name={icon} size={24} color="#fff" />
-              </TouchableOpacity>
-            )
-          )}
+          <TouchableOpacity
+            style={styles.socialButton}
+            onPress={handleGooglePress}
+            disabled={!request}
+          >
+            <Icon name="logo-google" size={24} color="#fff" />
+          </TouchableOpacity>
         </View>
 
         <TouchableOpacity onPress={() => navigation.replace("Register")}>
